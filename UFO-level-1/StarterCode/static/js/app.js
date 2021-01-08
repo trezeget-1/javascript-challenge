@@ -130,35 +130,18 @@ function button_selected(x){
             Object.keys(d).forEach(x=>row.append("td").text(d[x]))
         })
 
-    // This is the code to filter the menu only to the elements that I haven't filtered previously
+    // This is the code for adding the Dropdown Menu defaults and for the rest of the options, the filters accordingly
 
-    for (let x = 0, f = list_of_variables_selected.length; x<f; x++){       
-        for(let i = 0, n = dropdown_menu_items.length; i<n; i++){
-            let menu_item = `${dropdown_menu_items[i]}`
-                if (filtered_menu_items.includes(dropdown_menu_items[i])===false){
-                    filtered_menu_items.push(dropdown_menu_items[i])
-                }
-
-        }}
-
-        for (let x = 0, f = list_of_variables_selected.length; x<f; x++){
-            for (let i = filtered_menu_items.length; i>=0; i--){
-                if (list_of_variables_selected[x] === filtered_menu_items[i]){
-                    filtered_menu_items.splice(i,1)
-                }
-            }
-        }
-
-// This is the code for adding the Dropdown Menu defaults and for the rest of the options, the filters accordingly
-
-    for(let i = 0, n = filtered_menu_items.length; i<n; i++){
-        let menu_item = `${filtered_menu_items[i]}`
+    for(let i = 0, n = dropdown_menu_items.length; i<n; i++){
+        let menu_item = `${dropdown_menu_items[i]}`
         
             d3.select(`.${menu_item}`).selectAll("option").remove();
 
-            // This is to add the dropdown menu defaults in the first line 
-            let selection = d3.select(`.${menu_item}`)
-            selection.append("option").text(dropdown_menu_defaults[i]).attr("disabled", true).attr("selected", true).attr("value", "").attr("class","text-center")
+            // This is to add the dropdown menu defaults in the first line
+            if (list_of_variables_selected.includes(dropdown_menu_items[i])===false){
+                let selection = d3.select(`.${menu_item}`)
+                selection.append("option").text(dropdown_menu_defaults[i]).attr("disabled", true).attr("selected", true).attr("value", "").attr("class","text-center")
+            }
             
             unique_table = []
     
@@ -171,9 +154,9 @@ function button_selected(x){
             unique_table.forEach(d=>{
                     d3.select(`.${menu_item}`).append("option").text(d)
                 })
-        }
-        temp_data = final_data      
     }
+    temp_data = final_data      
+}
 
 d3.select(".datetime").on("change",function(){
     var a = "datetime"
@@ -199,4 +182,3 @@ d3.select(".shape").on("change",function(){
     var a = "shape"
     button_selected(a)
     })
-
