@@ -1,12 +1,13 @@
-// YOUR CODE HERE!
-
-final_data = data
+// Some initial definitions
 
 let dropdown_menu_items = ["datetime", "city", "state", "country", "shape"]
-let dropdown_menu_defaults = ["Choose an option", "Choose an option", "Choose an option", "Choose an option", "Choose an option"]
-
-
 let tbody = d3.select("tbody");
+let dropdown_menu_defaults = []
+for(let i = 0, n = 5; i<5; i++){
+    dropdown_menu_defaults.push("Please select an option")
+}
+
+// This is the code for filling up the original table on the home screen
 
 function reset_table(){
     data.forEach(d=>{
@@ -63,18 +64,18 @@ button_reset.on("click",function(){
     reset_table()
     list_of_variables_selected = []
     filtered_menu_items = []
-    filtered_dropdown_menu_defaults = []
     temp_data = data;
     activate_dropdown();
     })
 
+// This is the code to activate the default dropdown menu 
 
 function activate_dropdown(){
 
     for(let i = 0, n = dropdown_menu_defaults.length; i<n; i++){
         d3.select(`.${dropdown_menu_items[i]}`).selectAll("option").remove();
         let selection = d3.select(`.${dropdown_menu_items[i]}`)
-        selection.append("option").text(dropdown_menu_defaults[i]).attr("disabled", true).attr("selected", true).attr("value", "")
+        selection.append("option").text(dropdown_menu_defaults[i]).attr("disabled", true).attr("selected", true).attr("value", "").attr("class","text-center")
     }
 
     dropdown_menu_items.forEach(x=>{
@@ -97,11 +98,11 @@ function activate_dropdown(){
 
 activate_dropdown()
 
-// Button function:
-
 var filtered_menu_items = []
-var filtered_dropdown_menu_defaults = []
+var list_of_variables_selected = []
 var temp_data = data
+
+// This is the code for the Multiple Filter Search BUtton
 
 function button_selected(x){
     list_of_variables_selected.push(x)
@@ -129,33 +130,26 @@ function button_selected(x){
             Object.keys(d).forEach(x=>row.append("td").text(d[x]))
         })
 
-    // MENU ITEMS
+    // This is the code to filter the menu only to the elements that I haven't filtered previously
 
     for (let x = 0, f = list_of_variables_selected.length; x<f; x++){       
         for(let i = 0, n = dropdown_menu_items.length; i<n; i++){
             let menu_item = `${dropdown_menu_items[i]}`
-            if (list_of_variables_selected[x] === dropdown_menu_items[i]){    
-                //  
-            }else{
                 if (filtered_menu_items.includes(dropdown_menu_items[i])===false){
                     filtered_menu_items.push(dropdown_menu_items[i])
-                    filtered_dropdown_menu_defaults.push(dropdown_menu_defaults[i])
                 }
 
-            }
         }}
 
         for (let x = 0, f = list_of_variables_selected.length; x<f; x++){
-            for (let i = filtered_menu_items.length; i>0; i--){
+            for (let i = filtered_menu_items.length; i>=0; i--){
                 if (list_of_variables_selected[x] === filtered_menu_items[i]){
                     filtered_menu_items.splice(i,1)
                 }
             }
         }
 
-        console.log(filtered_menu_items)
-
-// CORREGIR
+// This is the code for adding the Dropdown Menu defaults and for the rest of the options, the filters accordingly
 
     for(let i = 0, n = filtered_menu_items.length; i<n; i++){
         let menu_item = `${filtered_menu_items[i]}`
@@ -164,7 +158,7 @@ function button_selected(x){
 
             // This is to add the dropdown menu defaults in the first line 
             let selection = d3.select(`.${menu_item}`)
-            selection.append("option").text(filtered_dropdown_menu_defaults[i]).attr("disabled", true).attr("selected", true).attr("value", "")
+            selection.append("option").text(dropdown_menu_defaults[i]).attr("disabled", true).attr("selected", true).attr("value", "").attr("class","text-center")
             
             unique_table = []
     
@@ -180,8 +174,6 @@ function button_selected(x){
         }
         temp_data = final_data      
     }
-
-var list_of_variables_selected = []
 
 d3.select(".datetime").on("change",function(){
     var a = "datetime"
